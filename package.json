@@ -11,8 +11,10 @@
     "@types/node": "^16.11.56",
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
+    "autoprefixer": "10.4.5",
     "axios": "^0.27.2",
-    "bootstrap": "^5.2.0",
+    "bootstrap": "^4.5.3",
+    "flag-icons": "^6.6.6",
     "i18next": "^21.9.1",
     "i18next-browser-languagedetector": "^6.1.5",
     "i18next-http-backend": "^1.4.1",
@@ -25,6 +27,9 @@
     "react-scripts": "5.0.1",
     "typescript": "^4.8.2",
     "web-vitals": "^2.1.4"
+  },
+  "overrides": {
+    "autoprefixer": "10.4.5"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -49,5 +54,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/bootstrap": "^5.2.3"
   }
 }
