@@ -128,7 +128,7 @@ const App = () => {
             ))}
           </ul>
         </div>
-        {news.map((rapport: any, index: any) => (
+        {news.map((news: any, index: any) => (
           <div
             key={index}
             style={{
@@ -139,12 +139,12 @@ const App = () => {
               backgroundColor: 'tomato',
             }}
           >
-            <h4>{rapport.title}</h4>
-            <p>{rapport.description}</p>
-            <img src={rapport.urlToImage} alt="ss" style={{ width: '30%' }} />
-            <h4>{rapport.author}</h4>
-            <p>{rapport.publishedAt}</p>
-            <p>{rapport.content}</p>
+            <h4>{news.title}</h4>
+            <p>{news.description}</p>
+            <img src={news.urlToImage} alt="ss" style={{ width: '30%' }} />
+            <h4>{news.author}</h4>
+            <p>{news.publishedAt}</p>
+            <p>{news.content}</p>
           </div>
         ))}
       </div>
