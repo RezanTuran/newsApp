@@ -9,8 +9,9 @@ import cookies from 'js-cookie';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/js/bootstrap.js';
 import 'flag-icons/css/flag-icons.min.css';
-import languages from './languages/languages';
-import GlobeIcon from '../src/GlobeIcon/globeIcon';
+import languages from './languages';
+import GlobeIcon from '../src/GlobeIcon';
+import categories from '../src/categories';
 
 i18n
   .use(initReactI18next)
@@ -34,10 +35,16 @@ const App = () => {
   const { t } = useTranslation();
   const [news, setNews] = useState([]);
 
+  const handleCick = (id: any) => {
+    const currentCategory = categories.find((category) => category.id === id);
+    cookies.set('cat', currentCategory?.category || '');
+  };
+  const getCategory = cookies.get('cat');
+
   useEffect(() => {
     document.body.dir = currentLanguage?.dir || 'ltr';
     Axios.get(
-      `https://newsapi.org/v2/top-headlines?country=${currentLanguageCode}&category=sport&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`
+      `${process.env.REACT_APP_NEWS_API_LINK}country=${currentLanguageCode}&category=${getCategory}&apiKey=${process.env.REACT_APP_NEWS_API_KEY}`
     )
       .then((Response: any) => {
         setNews(Response.data.articles);
@@ -46,7 +53,7 @@ const App = () => {
       .catch((err) => {
         console.error(err);
       });
-  }, [currentLanguage, currentLanguageCode]);
+  }, [currentLanguage, currentLanguageCode, getCategory]);
 
   return (
     <div>
@@ -89,25 +96,58 @@ const App = () => {
           <h1 className="font-weight-normal mb-3">{t('welcome_message')}</h1>
         </div>
       </div>
-      {news.map((news: any, index: any) => (
+
+      <div
+        style={{
+          backgroundColor: 'teal',
+          display: 'flex',
+          flexDirection: 'column',
+          width: '100%',
+        }}
+      >
         <div
-          key={index}
           style={{
-            width: '90%',
-            border: '2px solid black',
-            margin: '10px',
-            padding: '10px',
-            backgroundColor: 'tomato',
+            backgroundColor: 'springgreen',
+            width: '100%',
           }}
         >
-          <h4>{news.title}</h4>
-          <p>{news.description}</p>
-          <img src={news.urlToImage} alt="ss" style={{ width: '30%' }} />
-          <h4>{news.author}</h4>
-          <p>{news.publishedAt}</p>
-          <p>{news.content}</p>
+          <ul className="navbar-nav mr-auto">
+            {categories.map(({ category, id }) => (
+              <li
+                className="nav-item"
+                key={id}
+                onClick={() => window.location.reload()}
+              >
+                <button
+                  onClick={() => handleCick(id)}
+                  className='class="nav-link'
+                >
+                  {category}
+                </button>
+              </li>
+            ))}
+          </ul>
         </div>
-      ))}
+        {news.map((rapport: any, index: any) => (
+          <div
+            key={index}
+            style={{
+              width: '90%',
+              border: '2px solid black',
+              margin: '10px',
+              padding: '10px',
+              backgroundColor: 'tomato',
+            }}
+          >
+            <h4>{rapport.title}</h4>
+            <p>{rapport.description}</p>
+            <img src={rapport.urlToImage} alt="ss" style={{ width: '30%' }} />
+            <h4>{rapport.author}</h4>
+            <p>{rapport.publishedAt}</p>
+            <p>{rapport.content}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
