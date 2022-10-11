@@ -7,6 +7,8 @@ import data from './data';
 import GlobeIcon from '../../GlobeIcon';
 import cookies from 'js-cookie';
 import Axios from 'axios';
+import styles from './styles';
+import { useMediaQuery } from 'react-responsive';
 
 i18n
   .use(initReactI18next)
@@ -30,6 +32,7 @@ const Languages = () => {
   const { t } = useTranslation();
   const [news, setNews] = useState([]);
   const getCategory = cookies.get('cat');
+  const isMobile = useMediaQuery({ query: `(max-width: 760px)` });
 
   useEffect(() => {
     document.body.dir = currentLanguage?.dir || 'ltr';
@@ -38,7 +41,7 @@ const Languages = () => {
     )
       .then((Response: any) => {
         setNews(Response.data.articles);
-        console.table(Response.data.articles);
+        //console.table(Response.data.articles);
       })
       .catch((err) => {
         console.error(err);
@@ -47,65 +50,59 @@ const Languages = () => {
 
   return (
     <div>
-      <div className="container">
-        <div className="d-flex justify-content-end">
-          <div className="dropdown">
-            <button
-              className="btn btn-link dropdown-toggle"
-              type="button"
-              id="dropdownMenuButton"
-              data-toggle="dropdown"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <GlobeIcon />
-            </button>
-
-            <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-              {data.map(({ code, name, country_code }) => (
-                <li key={country_code} onClick={() => window.location.reload()}>
-                  <button
-                    className="dropdown-item"
-                    onClick={() => i18n.changeLanguage(code)}
-                    disabled={code === currentLanguageCode}
-                  >
-                    <span
-                      className={`fi fi-${country_code} mx-2`}
-                      style={{
-                        opacity: code === currentLanguageCode ? 0.5 : 1,
-                      }}
-                    ></span>
-                    {name}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div className="d-flex flex-column align-items-start">
-          <h1 className="font-weight-normal mb-3">{t('welcome_message')}</h1>
-        </div>
-      </div>
-
-      {news.map((news: any, index: any) => (
-        <div
-          key={index}
-          style={{
-            width: '90%',
-            border: '2px solid black',
-            margin: '10px',
-            padding: '10px',
-            backgroundColor: 'tomato',
-          }}
+      <div className="dropdown" style={styles.dropdown}>
+        <button
+          className="btn btn-link dropdown-toggle"
+          type="button"
+          id="dropdownMenuButton"
+          data-toggle="dropdown"
+          aria-haspopup="true"
+          aria-expanded="false"
         >
-          <h4>{news.title}</h4>
-          <p>{news.description}</p>
-          <img src={news.urlToImage} alt="ss" style={{ width: '30%' }} />
-          <h4>{news.author}</h4>
-          <p>{news.publishedAt}</p>
-          <p>{news.content}</p>
-        </div>
-      ))}
+          <GlobeIcon />
+        </button>
+
+        <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          {data.map(({ code, name, country_code }) => (
+            <li key={country_code} onClick={() => window.location.reload()}>
+              <button
+                className="dropdown-item"
+                onClick={() => i18n.changeLanguage(code)}
+                disabled={code === currentLanguageCode}
+              >
+                <span
+                  className={`fi fi-${country_code} mx-2`}
+                  style={{
+                    opacity: code === currentLanguageCode ? 0.5 : 1,
+                  }}
+                ></span>
+                {name}
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+      <h1 style={styles.welcomeTitle}>{t('welcome_message')}</h1>
+
+      <div style={styles.container}>
+        {news.map((news: any, index: any) => (
+          <div key={index} style={isMobile ? styles.rowMobil : styles.row}>
+            <div
+              style={{
+                height: '20em',
+                backgroundSize: 'cover',
+                backgroundImage: `url(${news.urlToImage})`,
+              }}
+            ></div>
+            <div style={styles.newsInfo}>
+              <h5>{news.author}</h5>
+              <h4>{news.title}</h4>
+              <p>{news.description}</p>
+              <p>{news.publishedAt}</p>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
