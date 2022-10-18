@@ -1,6 +1,7 @@
 import React from 'react';
 import data from './data';
 import cookies from 'js-cookie';
+import CategoryIcon from '../../Icons/CategoryIcon';
 
 const Categories = () => {
   const handleCick = (id: any) => {
@@ -11,43 +12,36 @@ const Categories = () => {
   const categoryId = cookies.get('id');
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
-      <button className="navbar-brand">Global News</button>
+    <div className="dropdown">
       <button
-        className="navbar-toggler"
+        className="btn btn-link dropdown-toggle"
         type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
+        id="dropdownMenuButton"
+        data-toggle="dropdown"
+        aria-haspopup="true"
         aria-expanded="false"
-        aria-label="Toggle navigation"
       >
-        <span className="navbar-toggler-icon"></span>
+        <CategoryIcon />
       </button>
-      <div className="collapse navbar-collapse" id="navbarNav">
-        <ul className="navbar-nav">
-          {data.map(({ category, id }) => (
-            <li
-              key={id}
-              className="nav-item active"
-              onClick={() => window.location.reload()}
+      <ul className="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+        {data.map(({ category, id }) => (
+          <li
+            key={id}
+            className="nav-item active"
+            onClick={() => window.location.reload()}
+          >
+            <button
+              onClick={() => handleCick(id)}
+              disabled={id === categoryId}
+              className="dropdown-item"
+              style={{ textTransform: 'capitalize' }}
             >
-              <button
-                onClick={() => handleCick(id)}
-                disabled={id === categoryId}
-                style={{
-                  border: 'none',
-                  backgroundColor: '#f8f9fa',
-                  textTransform: 'capitalize',
-                }}
-              >
-                {category}
-              </button>
-            </li>
-          ))}
-        </ul>
-      </div>
-    </nav>
+              {category}
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 };
 

@@ -8,8 +8,8 @@ const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 const loadingMarkup = (
-  <div className="py-4 text-center">
-    <h2>Lodading</h2>
+  <div className="spinner-border text-danger" role="status">
+    <span className="sr-only">Loading...</span>
   </div>
 );
 root.render(
